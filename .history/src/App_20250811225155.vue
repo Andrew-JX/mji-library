@@ -4,7 +4,7 @@ import Form from "./components/Form.vue";
 </script>
 
 <template>
-  <!-- <JSONView /> -->
+  <JSONView />
   <Form />
 </template>
 
