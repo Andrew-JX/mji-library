@@ -3,6 +3,7 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
+        <h1 class="text-center mb-4">Form Handling Example</h1>
         <h1 class="text-center mb-3 display-6">User Information Form</h1>
         <form @submit.prevent="submitForm">
           <div class="row mb-3">
@@ -75,18 +76,6 @@
             </div>
           </div>
         </div>
-
-        <div class="mt-5" v-if="submittedCards.length">
-          <DataTable :value="submittedCards" dataKey="createdAt" responsiveLayout="scroll" paginator :rows="5"
-            :rowsPerPageOptions="[5, 10, 20]" showGridlines class="p-datatable-sm">
-            <Column field="username" header="Username" sortable></Column>
-            <Column field="isAustralian" header="Resident" :body="resBody"></Column>
-            <Column field="gender" header="Gender" sortable></Column>
-            <Column field="reason" header="Reason"></Column>
-            <Column field="createdAt" header="Created At" sortable></Column>
-          </DataTable>
-        </div>
-
       </div>
     </div>
   </div>
@@ -193,7 +182,6 @@ const validateReason = (blur) => {
   }
 };
 
-const resBody = (row) => (row.isAustralian ? 'Yes' : 'No');
 
 </script>
 

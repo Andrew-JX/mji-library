@@ -3,6 +3,7 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
+        <h1 class="text-center mb-4">Form Handling Example</h1>
         <h1 class="text-center mb-3 display-6">User Information Form</h1>
         <form @submit.prevent="submitForm">
           <div class="row mb-3">
@@ -193,7 +194,6 @@ const validateReason = (blur) => {
   }
 };
 
-const resBody = (row) => (row.isAustralian ? 'Yes' : 'No');
 
 </script>
 

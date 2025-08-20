@@ -3,21 +3,21 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
+        <h1 class="text-center mb-4">Form Handling Example</h1>
         <h1 class="text-center mb-3 display-6">User Information Form</h1>
         <form @submit.prevent="submitForm">
           <div class="row mb-3">
             <div class="col-md-6 col-sm-6">
               <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" :class="{ 'is-invalid': !!errors.username }"
-                @blur="() => validateName(true)" @input="() => validateName(false)" v-model="formData.username" />
+              <input type="text" class="form-control" id="username" @blur="() => validateName(true)"
+                @input="() => validateName(false)" v-model="formData.username" />
               <div v-if="errors.username" class="invalid-feedback d-block">{{ errors.username }}</div>
             </div>
 
             <div class="col-md-6 col-sm-6">
               <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" :class="{ 'is-invalid': !!errors.password }" id="password"
-                @blur="() => validatePassword(true)" @input="() => validatePassword(false)"
-                v-model="formData.password" />
+              <input type="password" class="form-control" id="password" @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)" v-model="formData.password" />
               <div v-if="errors.password" class="invalid-feedback d-block">{{ errors.password }}</div>
             </div>
 
@@ -33,22 +33,17 @@
 
             <div class="col-md-6 col-sm-6">
               <label for="gender" class="form-label">Gender</label>
-              <select class="form-select" :class="{ 'is-invalid': !!errors.gender }" @blur="() => validateGender(true)"
-                @change="() => validateGender(false)" id="gender" v-model="formData.gender">
+              <select class="form-select" id="gender" v-model="formData.gender">
                 <option value="">Select...</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
-              <div v-if="errors.gender" class="invalid-feedback d-block">{{ errors.gender }}</div>
             </div>
 
             <div class="col-12">
               <label for="reason" class="form-label">Reason for Joining</label>
-              <textarea class="form-control" :class="{ 'is-invalid': !!errors.reason }"
-                @blur="() => validateReason(true)" @input="() => validateReason(false)" id="reason" rows="3"
-                v-model="formData.reason"></textarea>
-              <div v-if="errors.reason" class="invalid-feedback d-block">{{ errors.reason }}</div>
+              <textarea class="form-control" id="reason" rows="3" v-model="formData.reason"></textarea>
             </div>
           </div>
 
@@ -75,18 +70,6 @@
             </div>
           </div>
         </div>
-
-        <div class="mt-5" v-if="submittedCards.length">
-          <DataTable :value="submittedCards" dataKey="createdAt" responsiveLayout="scroll" paginator :rows="5"
-            :rowsPerPageOptions="[5, 10, 20]" showGridlines class="p-datatable-sm">
-            <Column field="username" header="Username" sortable></Column>
-            <Column field="isAustralian" header="Resident" :body="resBody"></Column>
-            <Column field="gender" header="Gender" sortable></Column>
-            <Column field="reason" header="Reason"></Column>
-            <Column field="createdAt" header="Created At" sortable></Column>
-          </DataTable>
-        </div>
-
       </div>
     </div>
   </div>
@@ -94,9 +77,6 @@
 
 <script setup>
 import { ref } from 'vue';
-
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
 
 const formData = ref({
   username: '',
@@ -110,24 +90,20 @@ const submittedCards = ref([]);
 
 const submitForm = () => {
   validateName(true);
-  validatePassword(true);
-  validateResident(true);
-  validateGender(true);
-  validateReason(true);
-
-  const hasError = Object.values(errors.value).some(Boolean);
-  if (!hasError) {
-    submittedCards.value.push({
-      ...formData.value,
-      createdAt: new Date().toISOString()
-    });
+  if (!errors.value.username) {
+    submittedCards.value.push({ ...formData.value });
     clearForm();
   }
 };
 
 const clearForm = () => {
-  formData.value = { username: '', password: '', isAustralian: false, reason: '', gender: '' };
-  errors.value = { username: null, password: null, resident: null, gender: null, reason: null };
+  formData.value = {
+    username: '',
+    password: '',
+    isAustralian: false,
+    reason: '',
+    gender: ''
+  };
 };
 
 const errors = ref({
@@ -168,32 +144,6 @@ const validatePassword = (blur) => {
     errors.value.password = null;
   }
 };
-
-const validateResident = (blur) => {
-  if (!formData.value.isAustralian) {
-    if (blur) errors.value.resident = 'Please confirm Australian residency.';
-  } else {
-    errors.value.resident = null;
-  }
-};
-
-const validateGender = (blur) => {
-  if (!formData.value.gender) {
-    if (blur) errors.value.gender = 'Please select a gender.';
-  } else {
-    errors.value.gender = null;
-  }
-};
-
-const validateReason = (blur) => {
-  if (!formData.value.reason || formData.value.reason.trim().length < 10) {
-    if (blur) errors.value.reason = 'Reason must be at least 10 characters.';
-  } else {
-    errors.value.reason = null;
-  }
-};
-
-const resBody = (row) => (row.isAustralian ? 'Yes' : 'No');
 
 </script>
 
